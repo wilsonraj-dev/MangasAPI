@@ -7,12 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MangasAPI.Controllers
 {
+    /// <summary>
+    /// CategoriasController
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class CategoriasController : ControllerBase
     {
         private readonly ICategoriaRepository _categoriaRepository;
         private readonly IMapper _mapper;
+
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="categoryRepository"></param>
+        /// <param name="mapper"></param>
         public CategoriasController(ICategoriaRepository categoryRepository,
             IMapper mapper)
         {
@@ -20,6 +29,10 @@ namespace MangasAPI.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Retorna uma lista com as categorias cadastradas
+        /// </summary>
+        /// <returns>As categorias encontrada</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -35,6 +48,11 @@ namespace MangasAPI.Controllers
             return Ok(categoriasDto);
         }
 
+        /// <summary>
+        /// Obtem uma categoria pelo seu Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A categoria encontrada</returns>
         [HttpGet("{id:int}", Name = "GetCategoria")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,6 +68,20 @@ namespace MangasAPI.Controllers
             return Ok(categoriaDto);
         }
 
+        /// <summary>
+        /// Cadastra uma nova categoria
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de request:
+        /// 
+        ///     POST Categorias
+        ///     {
+        ///         "nome": "Shounen"
+        ///     }
+        /// </remarks>
+        /// <param name="categoriaDto">Objeto categoriaDTO</param>
+        /// <returns>Criação de uma nova categoria</returns>
+        /// <remarks>Retorna o objeto Categoria incluído</remarks>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Post([FromBody] CategoriaDTO categoriaDto)
@@ -65,6 +97,22 @@ namespace MangasAPI.Controllers
             return new CreatedAtRouteResult("GetCategoria", new { id = categoriaDto.Id }, categoriaDto);
         }
 
+        /// <summary>
+        /// Atualiza uma categoria
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de request:
+        /// 
+        ///     PUT Categorias
+        ///     {
+        ///         "id": 1,
+        ///         "nome": "Romance"
+        ///     }
+        /// </remarks>
+        /// <param name="id">Id da categoria</param>
+        /// <param name="categoriaDto">Objeto CategoriaDTO</param>
+        /// <returns>O objeto categoria atualizado</returns>
+        /// <remarks>O objeto categoria atualizado</remarks>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,6 +133,11 @@ namespace MangasAPI.Controllers
             return Ok(categoriaDto);
         }
 
+        /// <summary>
+        /// Remove uma categoria
+        /// </summary>
+        /// <param name="id">Id da categoria</param>
+        /// <returns>Objeto categoria que foi removido</returns>
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
